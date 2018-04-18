@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package com.game.chess;
+
+option java_multiple_files = true;
+option java_package = "com.games.chess";
+option java_outer_classname = "ChessServerProto";
+
+service ChessService {
+  rpc play (PlayRequest) returns (PlayResponse) {}
+  rpc move (MoveRequest) returns (MoveResponse) {}
+  rpc isMyMove (IsMyMoveRequest) returns (IsMyMoveResponse) {}
+  rpc getBoard (GetBoardRequest) returns (GetBoardResponse) {}
+  rpc getPiecesRemoved (GetPiecesRemovedRequest) returns (stream GetPiecesRemovedResponse) {}
+}
+
+message PlayRequest {
+  string name = 2;
+  string ip = 3;
+  string uuid = 4;
+}
+
+message PlayResponse {
+  string message = 5;
+}
+
+message MoveRequest {
+  string id = 6;
+  string from = 7;
+  string to = 8;
+}
+
+message MoveResponse {
+  string message=9;
+}
+
+message IsMyMoveRequest{
+  string id=10;
+}
+
+message IsMyMoveResponse{
+ bool val=11;
+}
+
+message GetBoardRequest{
+string id=12;
+}
+
+message Row {
+repeated string piece=13; 
+}
+
+message GetBoardResponse{
+repeated Row row=14;
+}
+
+message Piece{
+string name=15;
+bool color=16;
+}
+
+message GetPiecesRemovedResponse{
+repeated Piece pieces=17;
+}
+
+message GetPiecesRemovedRequest{
+string id=18;
+}
