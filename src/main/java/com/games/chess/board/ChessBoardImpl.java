@@ -15,6 +15,7 @@ import com.games.chess.pieces.IPiece;
 import com.games.chess.pieces.King;
 import com.games.chess.pieces.Knight;
 import com.games.chess.pieces.Pawn;
+import com.games.chess.pieces.Piece;
 import com.games.chess.pieces.Queen;
 import com.games.chess.pieces.Rook;
 import com.games.chess.util.Util;
@@ -162,6 +163,7 @@ public class ChessBoardImpl implements ChessBoard {
 			String oldId = Util.getValue(to, this, boardMatrix);
 			Util.setValue(from, this, boardMatrix, null);
 			Util.setValue(to, this, boardMatrix, uniqueId);
+			becomeQueen(to, piece);
 			if (oldId != null)
 				piecesRemoved.push(uuid.get(oldId).toString());
 			BoardState prev = getState();
@@ -204,6 +206,18 @@ public class ChessBoardImpl implements ChessBoard {
 			System.out.println("Invalid Move : " + piece);
 		}
 		return false;
+	}
+
+	private void becomeQueen(String to, IPiece piece) {
+		if (piece instanceof Pawn) {
+			Integer rowPawn = Util.getPosition((Piece) piece, this).get(0);
+			if ((rowPawn == 0 && !piece.isWhite()) || (rowPawn == 7 && piece.isWhite())) {
+				System.out.println("Becoming queen ..");
+				String id = UUID.randomUUID().toString();
+				uuid.put(id, new Queen(id, this, piece.isWhite()));
+				Util.setValue(to, this, boardMatrix, id);
+			}
+		}
 	}
 
 	public boolean isCheckMated() {
